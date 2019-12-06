@@ -48,9 +48,9 @@ To integrate the recommended minimum setup for RIBs add the following to your `b
 
 ```gradle
 dependencies {
-  annotationProcessor 'com.uber.rib:rib-compiler-test:0.9.1'
-  compile 'com.uber.rib:rib-android:0.9.1'
-  testCompile 'com.uber.rib:rib-test-utils:0.9.1'
+  annotationProcessor 'com.uber.rib:rib-compiler-test:0.9.2'
+  compile 'com.uber.rib:rib-android:0.9.2'
+  testCompile 'com.uber.rib:rib-test-utils:0.9.2'
 }
 ```
 
@@ -70,6 +70,15 @@ To integrate RIBs into your project using Carthage add the following to your `Ca
 ```ruby
 github "uber/RIBs" ~> 0.9
 ```
+
+## Related projects
+
+If you like RIBs, check out other related open source projects from our team:
+- [Needle](https://github.com/uber/needle): a compile-time safe Swift dependency injection framework.
+- [Motif](https://github.com/uber/motif): An abstract on top of Dagger offering simpler APIs for nested scopes.
+- [Swift Concurrency](https://github.com/uber/swift-concurrency): a set of concurrency utility classes used by Uber, inspired by the equivalent [java.util.concurrent](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/package-summary.html) package classes.
+- [Swift Abstract Class](https://github.com/uber/swift-abstract-class): a light-weight library along with an executable that enables compile-time safe abstract class development for Swift projects.
+- [Swift Common](https://github.com/uber/swift-common): common libraries used by this set of Swift open source projects.
 
 ## License
 

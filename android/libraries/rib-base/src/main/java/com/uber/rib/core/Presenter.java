@@ -15,13 +15,15 @@
  */
 package com.uber.rib.core;
 
-import android.support.annotation.CallSuper;
+import androidx.annotation.CallSuper;
 
 import com.jakewharton.rxrelay2.BehaviorRelay;
 import com.jakewharton.rxrelay2.Relay;
 import com.uber.autodispose.ScopeProvider;
 import com.uber.rib.core.lifecycle.PresenterEvent;
 
+import io.reactivex.Completable;
+import io.reactivex.CompletableSource;
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
 
@@ -76,7 +78,7 @@ public abstract class Presenter implements ScopeProvider {
   }
 
   @Override
-  public Maybe<?> requestScope() {
-    return lifecycleRelay.skip(1).firstElement();
+  public CompletableSource requestScope() {
+    return lifecycleRelay.skip(1).firstElement().ignoreElement();
   }
 }

@@ -16,12 +16,12 @@
 
 apply plugin: "java-library"
 
-sourceCompatibility = "1.7"
-targetCompatibility = "1.7"
+sourceCompatibility = deps.build.javaVersion.toString()
+targetCompatibility = deps.build.javaVersion.toString()
 
 dependencies {
     compile project(":libraries:rib-base")
-    compileOnly deps.support.annotations
+    compileOnly deps.androidx.annotations
     compile deps.external.rxjava2
     compile deps.test.junit
     compile deps.test.assertj
