@@ -80,6 +80,16 @@ If you like RIBs, check out other related open source projects from our team:
 - [Swift Abstract Class](https://github.com/uber/swift-abstract-class): a light-weight library along with an executable that enables compile-time safe abstract class development for Swift projects.
 - [Swift Common](https://github.com/uber/swift-common): common libraries used by this set of Swift open source projects.
 
+#### Swift Package Manager
+
+To integrate RIBs into your project using Swift Package Manager add the following to your `Package.swift`:
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/uber/RIBs.git", from: "0.9.0"),
+]
+```
+
 ## License
 
     Copyright (C) 2017 Uber Technologies
