@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- package com.uber.presidio.intellij_plugin.generator;
+package com.uber.presidio.intellij_plugin.generator;
 
 import com.google.common.base.Charsets;
 import com.google.common.base.Preconditions;
@@ -38,7 +38,7 @@ import java.util.jar.JarFile;
 
 /**
  * Base class for generating rib classes.
- *
+ * <p>
  * <p>Templates are tokenized using a ${token_name} syntax. {@code package_name} and {@code
  * rib_name} token values are provided by the base generate - however subclasses can add custom
  * paramaters when needed using {@link Generator#getTemplateValuesMap()}.
@@ -52,21 +52,24 @@ public abstract class Generator {
   private final String packageName;
   private final String ribName;
   private final String templateString;
+  private final boolean isKotlin;
   private final Map<String, String> templateValuesMap;
 
   /**
-   * @param packageName rib package name.
-   * @param ribName rib name.
+   * @param packageName  rib package name.
+   * @param ribName      rib name.
    * @param templateName template to be used by this generate.
    */
-  public Generator(String packageName, String ribName, String templateName) {
+  public Generator(String packageName, String ribName, boolean isKotlin, String templateName) {
     this.packageName = packageName;
     this.ribName = ribName;
+    this.isKotlin = isKotlin;
 
     templateValuesMap = new HashMap<String, String>();
     templateValuesMap.put(TEMPLATE_TOKEN_PACKAGE_NAME, packageName);
     templateValuesMap.put(TEMPLATE_TOKEN_RIBLET_NAME, ribName);
     templateValuesMap.put(TEMPLATE_TOKEN_RIBLET_NAME_TO_LOWER, ribName.toLowerCase());
+
     try {
       String[] resources = getResourceListing(this.getClass(), "partials/");
       for (String resourceName : resources) {
@@ -88,8 +91,15 @@ public abstract class Generator {
     try {
       // Need to use getResourceAsStream() since we may be reading resources from inside a jar.
       // Class.getResource() doesn't work in this scenario.
+
+      String resource = "/templates/java/" + templateName + ".java.template";
+
+      if (isKotlin) {
+        resource = "/templates/kotlin/" + templateName + ".kt.template";
+      }
+
       InputStream resourceAsStream1 =
-          Generator.class.getResourceAsStream("/templates/" + templateName);
+          Generator.class.getResourceAsStream(resource);
       templateString =
           Preconditions.checkNotNull(
               CharStreams.toString(new InputStreamReader(resourceAsStream1, Charsets.UTF_8)));
@@ -98,25 +108,44 @@ public abstract class Generator {
     }
   }
 
-  /** @return the class name for the generated file. */
+  /**
+   * @return the class name for the generated file.
+   */
   public abstract String getClassName();
 
-  /** @return the package name for the generated file. */
+  /**
+   * @return the package name for the generated file.
+   */
   public final String getPackageName() {
     return packageName;
   }
 
-  /** @return the rib name for the generator. */
+  /**
+   * @return the rib name for the generator.
+   */
   public final String getRibName() {
     return ribName;
   }
 
-  /** @return the template values map, to add more template paramters. */
+  public final String getFileExtension() {
+
+    if (isKotlin) {
+      return ".kt";
+    }
+
+    return ".java";
+  }
+
+  /**
+   * @return the template values map, to add more template paramters.
+   */
   protected final Map<String, String> getTemplateValuesMap() {
     return templateValuesMap;
   }
 
-  /** @return the source for the generated file. */
+  /**
+   * @return the source for the generated file.
+   */
   public final String generate() {
     StrSubstitutor substitutor = new StrSubstitutor(templateValuesMap);
     String newFile = substitutor.replace(templateString);
@@ -130,7 +159,7 @@ public abstract class Generator {
    * http://stackoverflow.com/questions/6247144/how-to-load-a-folder-from-a-jar.
    *
    * @param clazz Any java class that lives in the same place as the resources you want.
-   * @param path Should end with "/", but not start with one.
+   * @param path  Should end with "/", but not start with one.
    * @return Just the name of each member item, not the full paths.
    * @throws URISyntaxException
    * @throws IOException

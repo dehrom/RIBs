@@ -1,9 +1,15 @@
 # RIBs Tutorial 2: Composing RIBs
 
-This project is the completed code for [tutorial 1](https://github.com/uber/RIBs/wiki/iOS-Tutorial-1) and the starting point for [tutorial 2](https://github.com/uber/RIBs/wiki/iOS-Tutorial-2).
+This project is the starting point for [tutorial 2](https://github.com/uber/RIBs/wiki/iOS-Tutorial-2).
 
 ### Getting started
-First you need to install pods for the tutorial:
+Install tooling, unless you've done so already:
+
+```
+<RIBs path>/ios/tooling/install-xcode-template.sh
+```
+
+Then, install pods for the tutorial:
 
 ```
 gem install cocoapods # In case you don't have it

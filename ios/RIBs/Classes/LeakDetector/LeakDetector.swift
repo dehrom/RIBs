@@ -16,6 +16,7 @@
 
 import Foundation
 import RxSwift
+import RxRelay
 
 /// Leak detection status.
 public enum LeakDetectionStatus {
@@ -75,14 +76,14 @@ public class LeakDetector {
     /// - returns: The handle that can be used to cancel the expectation.
     @discardableResult
     public func expectDeallocate(object: AnyObject, inTime time: TimeInterval = LeakDefaultExpectationTime.deallocation) -> LeakDetectionHandle {
-        expectationCount.value += 1
+        expectationCount.accept(expectationCount.value + 1)
 
         let objectDescription = String(describing: object)
         let objectId = String(ObjectIdentifier(object).hashValue) as NSString
         trackingObjects.setObject(object, forKey: objectId)
 
         let handle = LeakDetectionHandleImpl {
-            self.expectationCount.value -= 1
+            self.expectationCount.accept(self.expectationCount.value - 1)
         }
 
         Executor.execute(withDelay: time) {
@@ -102,7 +103,7 @@ public class LeakDetector {
                 }
             }
 
-            self.expectationCount.value -= 1
+            self.expectationCount.accept(self.expectationCount.value - 1)
         }
 
         return handle
@@ -116,10 +117,10 @@ public class LeakDetector {
     /// - returns: The handle that can be used to cancel the expectation.
     @discardableResult
     public func expectViewControllerDisappear(viewController: UIViewController, inTime time: TimeInterval = LeakDefaultExpectationTime.viewDisappear) -> LeakDetectionHandle {
-        expectationCount.value += 1
+        expectationCount.accept(expectationCount.value + 1)
 
         let handle = LeakDetectionHandleImpl {
-            self.expectationCount.value -= 1
+            self.expectationCount.accept(self.expectationCount.value - 1)
         }
 
         Executor.execute(withDelay: time) { [weak viewController] in
@@ -139,7 +140,7 @@ public class LeakDetector {
                 }
             }
 
-            self.expectationCount.value -= 1
+            self.expectationCount.accept(self.expectationCount.value - 1)
         }
 
         return handle
@@ -155,14 +156,14 @@ public class LeakDetector {
         /// Reset the state of Leak Detector, internal for UI test only.
         func reset() {
             trackingObjects.removeAllObjects()
-            expectationCount.value = 0
+            expectationCount.accept(0)
         }
     #endif
 
     // MARK: - Private Interface
 
     private let trackingObjects = NSMapTable<AnyObject, AnyObject>.strongToWeakObjects()
-    private let expectationCount = Variable<Int>(0)
+    private let expectationCount = BehaviorRelay<Int>(value: 0)
 
     lazy var disableLeakDetector: Bool = {
         if let environmentValue = ProcessInfo().environment["DISABLE_LEAK_DETECTION"] {
@@ -178,10 +179,10 @@ public class LeakDetector {
 fileprivate class LeakDetectionHandleImpl: LeakDetectionHandle {
 
     var cancelled: Bool {
-        return cancelledVariable.value
+        return cancelledRelay.value
     }
 
-    let cancelledVariable = Variable<Bool>(false)
+    let cancelledRelay = BehaviorRelay<Bool>(value: false)
     let cancelClosure: (() -> ())?
 
     init(cancelClosure: (() -> ())? = nil) {
@@ -189,7 +190,7 @@ fileprivate class LeakDetectionHandleImpl: LeakDetectionHandle {
     }
 
     func cancel() {
-        cancelledVariable.value = true
+        cancelledRelay.accept(true)
         cancelClosure?()
     }
 }

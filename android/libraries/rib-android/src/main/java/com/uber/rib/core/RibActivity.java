@@ -16,20 +16,24 @@
 package com.uber.rib.core;
 
 import android.content.Intent;
-import android.support.annotation.CallSuper;
-import android.support.annotation.Nullable;
+import androidx.annotation.CallSuper;
+import androidx.annotation.Nullable;
 import android.view.ViewGroup;
 import com.jakewharton.rxrelay2.BehaviorRelay;
 import com.jakewharton.rxrelay2.PublishRelay;
 import com.jakewharton.rxrelay2.Relay;
-import com.uber.autodispose.LifecycleEndedException;
-import com.uber.autodispose.LifecycleScopeProvider;
+import com.uber.autodispose.lifecycle.CorrespondingEventsFunction;
+import com.uber.autodispose.lifecycle.LifecycleEndedException;
+import com.uber.autodispose.lifecycle.LifecycleScopeProvider;
+import com.uber.autodispose.lifecycle.LifecycleScopes;
 import com.uber.rib.core.lifecycle.ActivityCallbackEvent;
 import com.uber.rib.core.lifecycle.ActivityLifecycleEvent;
+
+import io.reactivex.CompletableSource;
 import io.reactivex.Observable;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 
 /** Base implementation for all VIP {@link android.app.Activity}s. */
 public abstract class RibActivity extends AppCompatActivity
@@ -38,28 +42,24 @@ public abstract class RibActivity extends AppCompatActivity
   /**
    * Figures out which corresponding next lifecycle event in which to unsubscribe, for Activities.
    */
-  private static final Function<ActivityLifecycleEvent, ActivityLifecycleEvent> ACTIVITY_LIFECYCLE =
-      new Function<ActivityLifecycleEvent, ActivityLifecycleEvent>() {
-        @Override
-        public ActivityLifecycleEvent apply(ActivityLifecycleEvent lastEvent) {
-          switch (lastEvent.getType()) {
-            case CREATE:
-              return ActivityLifecycleEvent.create(ActivityLifecycleEvent.Type.DESTROY);
-            case START:
-              return ActivityLifecycleEvent.create(ActivityLifecycleEvent.Type.STOP);
-            case RESUME:
-              return ActivityLifecycleEvent.create(ActivityLifecycleEvent.Type.PAUSE);
-            case PAUSE:
-              return ActivityLifecycleEvent.create(ActivityLifecycleEvent.Type.STOP);
-            case STOP:
-              return ActivityLifecycleEvent.create(ActivityLifecycleEvent.Type.DESTROY);
-            case DESTROY:
-              throw new LifecycleEndedException(
-                  "Cannot bind to Activity lifecycle when outside of it.");
-          }
-          throw new UnsupportedOperationException(
-              "Binding to " + lastEvent + " not yet implemented");
+  private static final CorrespondingEventsFunction<ActivityLifecycleEvent> ACTIVITY_LIFECYCLE =
+      lastEvent -> {
+        switch (lastEvent.getType()) {
+          case CREATE:
+            return ActivityLifecycleEvent.create(ActivityLifecycleEvent.Type.DESTROY);
+          case START:
+            return ActivityLifecycleEvent.create(ActivityLifecycleEvent.Type.STOP);
+          case RESUME:
+            return ActivityLifecycleEvent.create(ActivityLifecycleEvent.Type.PAUSE);
+          case PAUSE:
+            return ActivityLifecycleEvent.create(ActivityLifecycleEvent.Type.STOP);
+          case STOP:
+            return ActivityLifecycleEvent.create(ActivityLifecycleEvent.Type.DESTROY);
+          case DESTROY:
+            throw new LifecycleEndedException(
+                "Cannot bind to Activity lifecycle when outside of it.");
         }
+        throw new UnsupportedOperationException("Binding to " + lastEvent + " not yet implemented");
       };
 
   @SuppressWarnings("NullableProblems")
@@ -119,7 +119,7 @@ public abstract class RibActivity extends AppCompatActivity
   }
 
   @Override
-  public Function<ActivityLifecycleEvent, ActivityLifecycleEvent> correspondingEvents() {
+  public CorrespondingEventsFunction<ActivityLifecycleEvent> correspondingEvents() {
     return ACTIVITY_LIFECYCLE;
   }
 
@@ -127,6 +127,11 @@ public abstract class RibActivity extends AppCompatActivity
   @Override
   public ActivityLifecycleEvent peekLifecycle() {
     return lifecycleBehaviorRelay.getValue();
+  }
+
+  @Override
+  public CompletableSource requestScope() {
+    return LifecycleScopes.resolveScopeFromLifecycle(this);
   }
 
   @SuppressWarnings("CheckNullabilityTypes")

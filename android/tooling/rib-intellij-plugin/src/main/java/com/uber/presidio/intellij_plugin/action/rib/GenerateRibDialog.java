@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- package com.uber.presidio.intellij_plugin.action.rib;
+package com.uber.presidio.intellij_plugin.action.rib;
 
 import com.intellij.openapi.ui.DialogWrapper;
 
@@ -24,14 +24,16 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-/** Dialog that prompts the user for information required to generate a new rib. */
+/**
+ * Dialog that prompts the user for information required to generate a new rib.
+ */
 public class GenerateRibDialog extends DialogWrapper {
 
+  private final Listener listener;
   private JPanel contentPane;
   private JTextField ribNameTextField;
   private JCheckBox createPresenterAndViewCheckBox;
-
-  private final Listener listener;
+  private JCheckBox createKotlinCode;
 
   public GenerateRibDialog(final Listener listener) {
     super(null);
@@ -39,6 +41,7 @@ public class GenerateRibDialog extends DialogWrapper {
     init();
 
     createPresenterAndViewCheckBox.setSelected(true);
+    createKotlinCode.setSelected(true);
   }
 
   @Nullable
@@ -52,19 +55,23 @@ public class GenerateRibDialog extends DialogWrapper {
     super.doOKAction();
 
     this.listener.onGenerateClicked(
-        ribNameTextField.getText(), createPresenterAndViewCheckBox.isSelected());
+        ribNameTextField.getText(),
+        createPresenterAndViewCheckBox.isSelected(),
+        createKotlinCode.isSelected());
   }
 
-  /** Listener interface to be implemented by consumers of the dialog. */
+  /**
+   * Listener interface to be implemented by consumers of the dialog.
+   */
   public interface Listener {
 
     /**
      * Called when the user clicks OK on the generate dialog.
      *
-     * @param ribName name for new rib.
+     * @param ribName                name for new rib.
      * @param createPresenterAndView {@code true} when a presenter and a corresponding view should
-     *     be created, {@code false} otherwise.
+     *                               be created, {@code false} otherwise.
      */
-    void onGenerateClicked(String ribName, boolean createPresenterAndView);
+    void onGenerateClicked(String ribName, boolean createPresenterAndView, boolean isKotlinSelected);
   }
 }

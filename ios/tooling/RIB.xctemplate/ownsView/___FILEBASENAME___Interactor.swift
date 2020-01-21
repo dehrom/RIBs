@@ -1,3 +1,5 @@
+//___FILEHEADER___
+
 import RIBs
 import RxSwift
 
@@ -6,7 +8,7 @@ protocol ___VARIABLE_productName___Routing: ViewableRouting {
 }
 
 protocol ___VARIABLE_productName___Presentable: Presentable {
-    weak var listener: ___VARIABLE_productName___PresentableListener? { get set }
+    var listener: ___VARIABLE_productName___PresentableListener? { get set }
     // TODO: Declare methods the interactor can invoke the presenter to present data.
 }
 
