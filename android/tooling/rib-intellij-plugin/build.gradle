@@ -17,7 +17,7 @@ repositories {
 dependencies {
     compile deps.apt.androidApi
     compile deps.build.commonsLang
-    compile deps.build.guava
+    compile deps.external.guavaAndroid
     compile deps.androidx.annotations
 
     testCompile(project(":libraries:rib-base")) {
@@ -27,7 +27,7 @@ dependencies {
         transitive = false
     }
 
-    testCompile(project(":libraries:rib-test-utils")) {
+    testCompile(project(":libraries:rib-test")) {
         transitive = false
     }
     testCompile(project(":libraries:rib-compiler-app")) {
@@ -41,7 +41,7 @@ dependencies {
     testCompile deps.external.dagger
     testCompile deps.uber.autodispose
     testCompile deps.uber.autodisposeLifecycle
-    testCompile deps.test.assertj
+    testCompile deps.test.truth
     testCompile deps.test.compileTesting
     testCompile deps.test.mockito
 }
