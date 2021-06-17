@@ -1,28 +1,23 @@
-// swift-tools-version:5.1
+// swift-tools-version:5.4
 import PackageDescription
 
 let package = Package(
     name: "RIBs",
     platforms: [
-        .iOS(.v9),
+        .iOS(.v13),
     ],
     products: [
         .library(name: "RIBs", targets: ["RIBs"]),
     ],
-    dependencies: [
-        .package(url: "https://github.com/ReactiveX/RxSwift", from: "6.0.0"),
-    ],
     targets: [
         .target(
             name: "RIBs",
-            dependencies: ["RxSwift", "RxRelay"],
             path: "ios/RIBs"
         ),
         .testTarget(
             name: "RIBsTests",
             dependencies: ["RIBs"],
-            path: "ios/RIBsTests",
-            exclude: ["ComponentizedBuilderTests.swift", "MultiStageComponentizedBuilderTests.swift"]
-        ),
+            path: "ios/RIBsTests"
+        )
     ]
 )
