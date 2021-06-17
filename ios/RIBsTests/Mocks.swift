@@ -1,5 +1,5 @@
 //
-//  Copyright (c) 2017. Uber Technologies
+//  Copyright (c) 2021. Uber Technologies
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -14,27 +14,27 @@
 //  limitations under the License.
 //
 
-import RIBs
 import Combine
+import RIBs
 import UIKit
 
 class WindowMock: UIWindow {
-    
+
     override var isKeyWindow: Bool {
         return internalIsKeyWindow
     }
-    
+
     override var rootViewController: UIViewController? {
         get { return internalRootViewController }
         set { internalRootViewController = newValue }
     }
-    
+
     override func makeKeyAndVisible() {
         internalIsKeyWindow = true
     }
-    
+
     // MARK: - Private
-    
+
     private var internalIsKeyWindow: Bool = false
     private var internalRootViewController: UIViewController?
 }

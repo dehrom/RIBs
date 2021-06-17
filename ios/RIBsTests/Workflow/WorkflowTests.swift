@@ -1,5 +1,5 @@
 //
-//  Copyright (c) 2017. Uber Technologies
+//  Copyright (c) 2021. Uber Technologies
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -14,9 +14,9 @@
 //  limitations under the License.
 //
 
-import XCTest
 import Combine
 @testable import RIBs
+import XCTest
 
 final class WorkerflowTests: XCTestCase {
 
@@ -33,34 +33,34 @@ final class WorkerflowTests: XCTestCase {
 
         let workflow = Workflow<String>()
         _ = workflow
-            .onStep { (mock) -> AnyPublisher<((), ()), Error> in
+            .onStep { mock -> AnyPublisher<((), ()), Error> in
                 outerStep1RunCount += 1
 
                 return emptyPublisher
             }
-            .onStep { (_, _) -> AnyPublisher<((), ()), Error> in
+            .onStep { _, _ -> AnyPublisher<((), ()), Error> in
                 outerStep2RunCount += 1
 
                 return emptyPublisher
             }
-            .onStep { (_, _) -> AnyPublisher<((), ()), Error> in
+            .onStep { _, _ -> AnyPublisher<((), ()), Error> in
                 outerStep3RunCount += 1
 
                 let innerStep: Step<String, (), ()>? = emptyPublisher.fork(workflow)
 
                 innerStep?
-                    .onStep({ (_, _) -> AnyPublisher<((), ()), Error> in
+                    .onStep { _, _ -> AnyPublisher<((), ()), Error> in
                         innerStep1RunCount += 1
                         return emptyPublisher
-                    })
-                    .onStep({ (_, _) -> AnyPublisher<((), ()), Error> in
+                    }
+                    .onStep { _, _ -> AnyPublisher<((), ()), Error> in
                         innerStep2RunCount += 1
                         return emptyPublisher
-                    })
-                    .onStep({ (_, _) -> AnyPublisher<((), ()), Error> in
+                    }
+                    .onStep { _, _ -> AnyPublisher<((), ()), Error> in
                         innerStep3RunCount += 1
                         return emptyPublisher
-                    })
+                    }
                     .commit()
 
                 return emptyPublisher
@@ -164,18 +164,18 @@ final class WorkerflowTests: XCTestCase {
             .onStep { _ -> AnyPublisher<((), ()), Error> in
                 rootCallCount += 1
                 return emptyPublisher
-        }
+            }
 
         let firstFork: Step<(), (), ()>? = rootStep.asPublisher().fork(workflow)
         _ = firstFork?
-            .onStep { (_, _) -> AnyPublisher<((), ()), Error> in
+            .onStep { _, _ -> AnyPublisher<((), ()), Error> in
                 return Just(((), ())).setFailureType(to: Error.self).eraseToAnyPublisher()
             }
             .commit()
 
         let secondFork: Step<(), (), ()>? = rootStep.asPublisher().fork(workflow)
         _ = secondFork?
-            .onStep { (_, _) -> AnyPublisher<((), ()), Error> in
+            .onStep { _, _ -> AnyPublisher<((), ()), Error> in
                 return Just(((), ())).setFailureType(to: Error.self).eraseToAnyPublisher()
             }
             .commit()

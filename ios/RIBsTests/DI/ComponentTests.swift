@@ -1,5 +1,5 @@
 //
-//  Copyright (c) 2017. Uber Technologies
+//  Copyright (c) 2021. Uber Technologies
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -14,8 +14,8 @@
 //  limitations under the License.
 //
 
-import XCTest
 @testable import RIBs
+import XCTest
 
 final class ComponentTests: XCTestCase {
 
@@ -58,10 +58,6 @@ private final class TestComponent: Component<EmptyComponent> {
     }
 }
 
-private protocol ClassProtocol: AnyObject {
+private protocol ClassProtocol: AnyObject {}
 
-}
-
-private final class ClassProtocolImpl: ClassProtocol {
-
-}
+private final class ClassProtocolImpl: ClassProtocol {}

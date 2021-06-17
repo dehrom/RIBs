@@ -27,19 +27,19 @@ OUTPUT=$(swiftformat \
   --indent 4 \
   --allman false \
   --wraparguments afterfirst \
-  --removelines disabled \
-  --wrapelements beforefirst \
+  --wrapcollections beforefirst \
   --exponentcase uppercase \
-  --insertlines disabled \
+  --enable blankLinesBetweenScopes \
+  --disable blankLinesAtStartOfScope \
+  --disable blankLinesAtEndOfScope \
   --binarygrouping none \
-  --empty tuples \
+  --voidtype tuples \
   --ranges nospace \
   --trimwhitespace always \
   --hexliteralcase lowercase \
   --linebreaks lf \
   --decimalgrouping none \
   --commas inline \
-  --comments ignore \
   --octalgrouping none \
   --hexgrouping none \
   --semicolons inline \

@@ -68,13 +68,11 @@ public extension Workflow {
     final func onStep<NextActionableItemType, NextValueType>(
         _ onStep: @escaping (ActionableItemType) -> AnyPublisher<(NextActionableItemType, NextValueType), Error>
     ) -> Step<ActionableItemType, NextActionableItemType, NextValueType> {
-        return Step(
-            workflow: self,
-            publisher: subject.prefix(1).eraseToAnyPublisher()
-        )
-        .onStep { (actionableItem: ActionableItemType, _) in
-            onStep(actionableItem)
-        }
+        return Step(workflow: self,
+                    publisher: subject.prefix(1).eraseToAnyPublisher())
+            .onStep { (actionableItem: ActionableItemType, _) in
+                onStep(actionableItem)
+            }
     }
 
     /// Subscribe and start the `Workflow` sequence.

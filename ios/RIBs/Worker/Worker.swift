@@ -93,9 +93,7 @@ open class Worker: Working {
     /// starts. The default implementation does nothing.
     ///
     /// - parameter interactorScope: The interactor scope this `Worker` is bound to.
-    open func didStart(_ interactorScope: InteractorScope) {
-
-    }
+    open func didStart(_ interactorScope: InteractorScope) {}
 
     /// Stops the worker.
     ///
@@ -197,7 +195,7 @@ public extension AnyCancellable {
     }
 }
 
-fileprivate class WeakInteractorScope: InteractorScope {
+private class WeakInteractorScope: InteractorScope {
 
     weak var sourceScope: InteractorScope?
 

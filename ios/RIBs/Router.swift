@@ -107,7 +107,7 @@ open class Router<InteractorType> {
     }
 
     // MARK: - Internal
-    
+
     func internalDidLoad() {
         bindSubtreeActiveState()
         lifecycleSubject.send(.didLoad)
@@ -146,7 +146,7 @@ extension Router: Routing {
         internalDidLoad()
         didLoad()
     }
-    
+
     // We cannot declare the attach/detach child methods to take in concrete `Router` instances,
     // since during unit testing, we need to use mocked child routers.
 
@@ -154,10 +154,8 @@ extension Router: Routing {
     ///
     /// - parameter child: The child `Router` to attach.
     public final func attachChild(_ child: Routing) {
-        assert(
-            (children.contains { $0 === child }) == false,
-            "Attempt to attach child: \(child), which is already attached to \(self)."
-        )
+        assert((children.contains { $0 === child }) == false,
+               "Attempt to attach child: \(child), which is already attached to \(self).")
 
         children.append(child)
 
@@ -166,7 +164,7 @@ extension Router: Routing {
         child.interactable.activate()
         child.load()
     }
-    
+
     /// Detaches the given `Router` from the tree.
     ///
     /// - parameter child: The child `Router` to detach.

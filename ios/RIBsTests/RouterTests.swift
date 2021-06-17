@@ -1,5 +1,5 @@
 //
-//  Copyright (c) 2017. Uber Technologies
+//  Copyright (c) 2021. Uber Technologies
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
 //
 
 import Combine
-import XCTest
 @testable import RIBs
+import XCTest
 
 final class RouterTests: XCTestCase {
 
