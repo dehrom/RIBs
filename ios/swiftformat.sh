@@ -26,10 +26,11 @@ OUTPUT=$(swiftformat \
   --cache ignore \
   --indent 4 \
   --allman false \
-  --wraparguments afterfirst \
+  --wraparguments before-first \
   --wrapcollections beforefirst \
   --exponentcase uppercase \
   --enable blankLinesBetweenScopes \
+  --enable redundantReturn \
   --disable blankLinesAtStartOfScope \
   --disable blankLinesAtEndOfScope \
   --binarygrouping none \

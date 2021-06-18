@@ -116,9 +116,10 @@ open class SimpleMultiStageComponentizedBuilder<Component, Router>: MultiStageCo
     }
 
     /// This method should not be directly invoked.
-    override public final func finalStageBuild(with component: Component,
-                                               _ dynamicDependency: ()) -> Router
-    {
+    override public final func finalStageBuild(
+        with component: Component,
+        _ dynamicDependency: ()
+    ) -> Router {
         return finalStageBuild(with: component)
     }
 

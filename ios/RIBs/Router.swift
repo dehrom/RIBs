@@ -154,8 +154,10 @@ extension Router: Routing {
     ///
     /// - parameter child: The child `Router` to attach.
     public final func attachChild(_ child: Routing) {
-        assert((children.contains { $0 === child }) == false,
-               "Attempt to attach child: \(child), which is already attached to \(self).")
+        assert(
+            (children.contains { $0 === child }) == false,
+            "Attempt to attach child: \(child), which is already attached to \(self)."
+        )
 
         children.append(child)
 

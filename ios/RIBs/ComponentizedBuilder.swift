@@ -52,11 +52,14 @@ open class ComponentizedBuilder<Component, Router, DynamicBuildDependency, Dynam
     /// - parameter dynamicComponentDependency: The dynamic dependency to
     /// use to instantiate the component.
     /// - returns: The router of the RIB.
-    public final func build(withDynamicBuildDependency dynamicBuildDependency: DynamicBuildDependency,
-                            dynamicComponentDependency: DynamicComponentDependency) -> Router
-    {
-        return build(withDynamicBuildDependency: dynamicBuildDependency,
-                     dynamicComponentDependency: dynamicComponentDependency).1
+    public final func build(
+        withDynamicBuildDependency dynamicBuildDependency: DynamicBuildDependency,
+        dynamicComponentDependency: DynamicComponentDependency
+    ) -> Router {
+        return build(
+            withDynamicBuildDependency: dynamicBuildDependency,
+            dynamicComponentDependency: dynamicComponentDependency
+        ).1
     }
 
     /// Build a new instance of the RIB with the given dynamic dependencies.
@@ -66,9 +69,10 @@ open class ComponentizedBuilder<Component, Router, DynamicBuildDependency, Dynam
     /// - parameter dynamicComponentDependency: The dynamic dependency to
     /// use to instantiate the component.
     /// - returns: The tuple of component and router of the RIB.
-    public final func build(withDynamicBuildDependency dynamicBuildDependency: DynamicBuildDependency,
-                            dynamicComponentDependency: DynamicComponentDependency) -> (Component, Router)
-    {
+    public final func build(
+        withDynamicBuildDependency dynamicBuildDependency: DynamicBuildDependency,
+        dynamicComponentDependency: DynamicComponentDependency
+    ) -> (Component, Router) {
         let component = componentBuilder(dynamicComponentDependency)
 
         // Ensure each componentBuilder invocation produces a new component
@@ -90,9 +94,10 @@ open class ComponentizedBuilder<Component, Router, DynamicBuildDependency, Dynam
     /// - parameter component: The corresponding DI component to use.
     /// - parameter dynamicBuildDependency: The given dynamic dependency.
     /// - returns: The router of the RIB.
-    open func build(with component: Component,
-                    _ dynamicBuildDependency: DynamicBuildDependency) -> Router
-    {
+    open func build(
+        with component: Component,
+        _ dynamicBuildDependency: DynamicBuildDependency
+    ) -> Router {
         fatalError("This method should be overridden by the subclass.")
     }
 
@@ -121,9 +126,10 @@ open class SimpleComponentizedBuilder<Component, Router>: ComponentizedBuilder<C
     }
 
     /// This method should not be directly invoked.
-    override public final func build(with component: Component,
-                                     _ dynamicDependency: ()) -> Router
-    {
+    override public final func build(
+        with component: Component,
+        _ dynamicDependency: ()
+    ) -> Router {
         return build(with: component)
     }
 

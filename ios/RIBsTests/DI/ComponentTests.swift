@@ -41,7 +41,7 @@ private final class TestComponent: Component<EmptyComponent> {
 
     private(set) var callCount: Int = 0
     private(set) var expectedOptionalShare: ClassProtocol? = {
-        return ClassProtocolImpl()
+        ClassProtocolImpl()
     }()
 
     var share: NSObject {

@@ -32,10 +32,11 @@ public enum Executor {
     ///   pauses.
     /// - parameter maxFrameDuration: The maximum duration a single frame should take. Defaults to 33ms.
     /// - parameter logic: The closure logic to perform.
-    public static func execute(withDelay delay: TimeInterval,
-                               maxFrameDuration: Int = 33,
-                               logic: @escaping () -> ())
-    {
+    public static func execute(
+        withDelay delay: TimeInterval,
+        maxFrameDuration: Int = 33,
+        logic: @escaping () -> ()
+    ) {
         let period = TimeInterval(maxFrameDuration / 3) / 1000 // milliseconds
         var lastRunLoopTime = Date().timeIntervalSinceReferenceDate
         var properFrameTime = 0.0

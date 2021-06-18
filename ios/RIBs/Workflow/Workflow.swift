@@ -68,11 +68,13 @@ public extension Workflow {
     final func onStep<NextActionableItemType, NextValueType>(
         _ onStep: @escaping (ActionableItemType) -> AnyPublisher<(NextActionableItemType, NextValueType), Error>
     ) -> Step<ActionableItemType, NextActionableItemType, NextValueType> {
-        return Step(workflow: self,
-                    publisher: subject.prefix(1).eraseToAnyPublisher())
-            .onStep { (actionableItem: ActionableItemType, _) in
-                onStep(actionableItem)
-            }
+        return Step(
+            workflow: self,
+            publisher: subject.prefix(1).eraseToAnyPublisher()
+        )
+        .onStep { (actionableItem: ActionableItemType, _) in
+            onStep(actionableItem)
+        }
     }
 
     /// Subscribe and start the `Workflow` sequence.
@@ -108,9 +110,10 @@ private extension Workflow {
 ///
 /// Steps are asynchronous by nature.
 open class Step<WorkflowActionableItemType, ActionableItemType, ValueType> {
-    fileprivate init(workflow: Workflow<WorkflowActionableItemType>,
-                     publisher: AnyPublisher<(ActionableItemType, ValueType), Error>)
-    {
+    fileprivate init(
+        workflow: Workflow<WorkflowActionableItemType>,
+        publisher: AnyPublisher<(ActionableItemType, ValueType), Error>
+    ) {
         self.workflow = workflow
         self.publisher = publisher
     }

@@ -100,9 +100,10 @@ public extension LeakDetector {
     /// - parameter inTime: The time the given object is expected to be deallocated within.
     /// - returns: The handle that can be used to cancel the expectation.
     @discardableResult
-    func expectDeallocate(object: AnyObject,
-                          inTime time: TimeInterval = LeakDefaultExpectationTime.deallocation) -> LeakDetectionHandle
-    {
+    func expectDeallocate(
+        object: AnyObject,
+        inTime time: TimeInterval = LeakDefaultExpectationTime.deallocation
+    ) -> LeakDetectionHandle {
         expectationCount.send(expectationCount.value + 1)
 
         let objectDescription = String(describing: object)
@@ -142,9 +143,10 @@ public extension LeakDetector {
     /// - parameter inTime: The time the given view controller is expected to disappear.
     /// - returns: The handle that can be used to cancel the expectation.
     @discardableResult
-    func expectViewControllerDisappear(viewController: UIViewController,
-                                       inTime time: TimeInterval = LeakDefaultExpectationTime.viewDisappear) -> LeakDetectionHandle
-    {
+    func expectViewControllerDisappear(
+        viewController: UIViewController,
+        inTime time: TimeInterval = LeakDefaultExpectationTime.viewDisappear
+    ) -> LeakDetectionHandle {
         expectationCount.send(expectationCount.value + 1)
 
         let handle = LeakDetectionHandleImpl {
