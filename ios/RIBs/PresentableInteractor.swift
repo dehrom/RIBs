@@ -16,6 +16,9 @@
 
 import Foundation
 
+/// The base protocol for all `Presenter`s.
+public protocol Presentable: AnyObject {}
+
 /// Base class of an `Interactor` that actually has an associated `Presenter` and `View`.
 open class PresentableInteractor<PresenterType>: Interactor {
     /// The `Presenter` associated with this `Interactor`.
