@@ -72,6 +72,22 @@ open class Interactor {
         .eraseToAnyPublisher()
 
     public init() {}
+    
+    /// The interactor did become active.
+    ///
+    /// - note: This method is driven by the attachment of this interactor's owner router. Subclasses should override
+    ///   this method to setup subscriptions and initial states.
+    open func didBecomeActive() {
+        // No-op
+    }
+
+    /// Callend when the `Interactor` will resign the active state.
+    ///
+    /// This method is driven by the detachment of this interactor's owner router. Subclasses should override this
+    /// method to cleanup any resources and states of the `Interactor`. The default implementation does nothing.
+    open func willResignActive() {
+        // No-op
+    }
 
     deinit {
         if isActive { deactivate() }
@@ -95,24 +111,6 @@ extension Interactor: Interactable {
         willResignActive()
         compositeCancellable.cancel()
         isActiveSubject.send(false)
-    }
-}
-
-extension Interactor {
-    /// The interactor did become active.
-    ///
-    /// - note: This method is driven by the attachment of this interactor's owner router. Subclasses should override
-    ///   this method to setup subscriptions and initial states.
-    open func didBecomeActive() {
-        // No-op
-    }
-
-    /// Callend when the `Interactor` will resign the active state.
-    ///
-    /// This method is driven by the detachment of this interactor's owner router. Subclasses should override this
-    /// method to cleanup any resources and states of the `Interactor`. The default implementation does nothing.
-    open func willResignActive() {
-        // No-op
     }
 }
 
