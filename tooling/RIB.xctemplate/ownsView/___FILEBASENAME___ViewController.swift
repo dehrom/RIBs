@@ -4,4 +4,4 @@ import RIBs
 import SwiftUI
 import UIKit
 
-final class ___VARIABLE_productName___ViewController: UIHostingController<___VARIABLE_productName___View>, ___VARIABLE_productName___ViewControllable {}
+final class ___VARIABLE_productName___ViewController<Content: View>: UIHostingController<Content>, ___VARIABLE_productName___ViewControllable {}
