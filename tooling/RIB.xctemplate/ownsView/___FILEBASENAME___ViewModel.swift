@@ -10,6 +10,8 @@ protocol ___VARIABLE_productName___PresentableListener: AnyObject {
     // interactor class.
 }
 
-final class ___VARIABLE_productName___ViewModel: ObservableObject, ___VARIABLE_productName___Presentable {
+final class ___VARIABLE_productName___ViewModel: ObservableObject {
     weak var listener: ___VARIABLE_productName___PresentableListener?
 }
+
+extension ___VARIABLE_productName___ViewModel: ___VARIABLE_productName___Presentable {}
